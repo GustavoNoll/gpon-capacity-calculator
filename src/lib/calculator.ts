@@ -5,6 +5,7 @@ export type Scenario = {
   ponlinks_per_olt: number;
   bulk_batch_size: number;
   bulk_seconds_per_call: number;
+  limit_threads_per_agent: number;
 };
 
 export type Massives = {
@@ -100,6 +101,8 @@ export type CalculatorResult = {
     sacThreads: number;
     apiThreads: number;
     totalThreads: number;
+    threadLimitPerAgent: number;
+    agentsNeeded: number;
   };
 };
 
@@ -149,6 +152,9 @@ export function calculate(input: CalculatorInput): CalculatorResult {
     sacThreads +
     apiThreads;
 
+  const threadLimitPerAgent = Math.max(1, scenario.limit_threads_per_agent);
+  const agentsNeeded = Math.ceil(totalThreads / threadLimitPerAgent);
+
   return {
     olts,
     bulk: {
@@ -174,6 +180,8 @@ export function calculate(input: CalculatorInput): CalculatorResult {
       sacThreads,
       apiThreads,
       totalThreads,
+      threadLimitPerAgent,
+      agentsNeeded,
     },
   };
 }

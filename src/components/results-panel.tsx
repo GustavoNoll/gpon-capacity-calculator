@@ -176,6 +176,17 @@ export function ResultsPanel({ input, result }: ResultsPanelProps) {
               large
             />
           </div>
+          <SummaryRow
+            label={L.thread_limit_per_agent}
+            value={summary.threadLimitPerAgent}
+          />
+          {summary.totalThreads > summary.threadLimitPerAgent ? (
+            <SummaryRow
+              label={L.agents_needed}
+              value={summary.agentsNeeded}
+              large
+            />
+          ) : null}
         </dl>
       </section>
     </div>

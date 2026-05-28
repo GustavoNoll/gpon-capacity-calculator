@@ -7,6 +7,7 @@ export const defaultCalculatorInput: CalculatorInput = {
     ponlinks_per_olt: 256,
     bulk_batch_size: 5,
     bulk_seconds_per_call: 240.0,
+    limit_threads_per_agent: 150,
   },
   massives: {
     per_day: 378.74,

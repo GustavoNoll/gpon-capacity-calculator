@@ -196,6 +196,14 @@ export function CalculatorApp() {
               min={0}
               hint="Duração média de cada chamada bulk"
             />
+            <NumberField
+              label={labels.scenario.limit_threads_per_agent}
+              value={input.scenario.limit_threads_per_agent}
+              onChange={(v) => updateScenario('limit_threads_per_agent', v)}
+              step={1}
+              min={1}
+              hint="Se total passar desse limite, divide em mais agents"
+            />
           </SectionCard>
 
           <SectionCard

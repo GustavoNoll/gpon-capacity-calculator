@@ -6,6 +6,7 @@ export const labels = {
     ponlinks_per_olt: 'PON links por OLT',
     bulk_batch_size: 'Tamanho do lote (bulk)',
     bulk_seconds_per_call: 'Segundos por chamada',
+    limit_threads_per_agent: 'Limite de threads por agent',
   },
   massives: {
     per_day: 'Massivas por dia',
@@ -57,5 +58,7 @@ export const labels = {
     sac_threads: 'Threads SAC',
     api_threads: 'Threads API',
     total_threads: 'Total de threads',
+    thread_limit_per_agent: 'Limite por agent',
+    agents_needed: 'Agents necessários',
   },
 } as const;
