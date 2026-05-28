@@ -100,8 +100,6 @@ export type CalculatorResult = {
     sacThreads: number;
     apiThreads: number;
     totalThreads: number;
-    sacSharePct: number;
-    apiSharePct: number;
   };
 };
 
@@ -176,8 +174,6 @@ export function calculate(input: CalculatorInput): CalculatorResult {
       sacThreads,
       apiThreads,
       totalThreads,
-      sacSharePct: pct(sacThreads, totalThreads),
-      apiSharePct: pct(apiThreads, totalThreads),
     },
   };
 }
