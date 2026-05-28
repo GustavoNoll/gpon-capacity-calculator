@@ -57,7 +57,5 @@ export const labels = {
     sac_threads: 'Threads SAC',
     api_threads: 'Threads API',
     total_threads: 'Total de threads',
-    sac_share: 'Participação SAC',
-    api_share: 'Participação API',
   },
 } as const;

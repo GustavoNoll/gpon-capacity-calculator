@@ -1,4 +1,5 @@
 import type { CalculatorInput, CalculatorResult } from '@/lib/calculator';
+import { pct } from '@/lib/calculator';
 import { labels } from '@/lib/labels';
 
 function fmt(n: number, digits = 2): string {
@@ -138,22 +139,43 @@ export function ResultsPanel({ input, result }: ResultsPanelProps) {
       <section className="rounded-lg border-2 border-[var(--accent)] bg-[var(--accent-muted)]/30 p-4">
         <h2 className="mb-3 text-sm font-semibold">{L.summary}</h2>
         <dl className="grid gap-1.5 text-xs">
-          <SummaryRow label={L.bulk_threads} value={summary.bulkContinuousThreads} />
-          <SummaryRow label={L.massives_threads} value={summary.massivesThreads} />
-          <SummaryRow label={L.routines_threads} value={summary.routinesThreads} />
+          <SummaryRow
+            label={L.bulk_threads}
+            value={summary.bulkContinuousThreads}
+            total={summary.totalThreads}
+          />
+          <SummaryRow
+            label={L.massives_threads}
+            value={summary.massivesThreads}
+            total={summary.totalThreads}
+          />
+          <SummaryRow
+            label={L.routines_threads}
+            value={summary.routinesThreads}
+            total={summary.totalThreads}
+          />
           <SummaryRow
             label={L.provisioning_threads}
             value={summary.provisioningThreads}
+            total={summary.totalThreads}
           />
-          <SummaryRow label={L.sac_threads} value={summary.sacThreads} />
-          <SummaryRow label={L.api_threads} value={summary.apiThreads} />
+          <SummaryRow
+            label={L.sac_threads}
+            value={summary.sacThreads}
+            total={summary.totalThreads}
+          />
+          <SummaryRow
+            label={L.api_threads}
+            value={summary.apiThreads}
+            total={summary.totalThreads}
+          />
           <div className="mt-2 border-t border-[var(--card-border)] pt-2">
-            <SummaryRow label={L.total_threads} value={summary.totalThreads} large />
+            <SummaryRow
+              label={L.total_threads}
+              value={summary.totalThreads}
+              large
+            />
           </div>
-          <p className="mt-2 text-[var(--muted)]">
-            {L.sac_share}: {fmt(summary.sacSharePct, 1)}% · {L.api_share}:{' '}
-            {fmt(summary.apiSharePct, 1)}%
-          </p>
         </dl>
       </section>
     </div>
@@ -186,12 +208,17 @@ function Row({
 function SummaryRow({
   label,
   value,
+  total,
   large,
 }: {
   label: string;
   value: number;
+  total?: number;
   large?: boolean;
 }) {
+  const sharePct =
+    total !== undefined && !large ? pct(value, total) : undefined;
+
   return (
     <div className="flex justify-between gap-4">
       <span className="text-[var(--muted)]">{label}</span>
@@ -199,6 +226,11 @@ function SummaryRow({
         className={`font-mono font-semibold ${large ? 'text-lg text-[var(--accent)]' : ''}`}
       >
         {fmt(value)}
+        {sharePct !== undefined ? (
+          <span className="ml-2 font-normal text-[var(--muted)]">
+            ({fmt(sharePct, 1)}%)
+          </span>
+        ) : null}
       </span>
     </div>
   );
