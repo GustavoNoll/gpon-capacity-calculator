@@ -171,10 +171,24 @@ export function ResultsPanel({ input, result }: ResultsPanelProps) {
           />
           <div className="mt-2 border-t border-[var(--card-border)] pt-2">
             <SummaryRow
-              label={L.total_threads}
+              label={L.gpon_min_threads}
+              value={summary.gponMinThreads}
+              large
+            />
+            <p className="mt-1 text-[11px] text-[var(--muted)]">
+              Provisionamento + SAC + API rodam de forma síncrona no GPON e
+              mantêm thread presa aguardando o Celery.
+            </p>
+          </div>
+          <div className="mt-2 border-t border-[var(--card-border)] pt-2">
+            <SummaryRow
+              label={L.celery_total_threads}
               value={summary.totalThreads}
               large
             />
+            <p className="mt-1 text-[11px] text-[var(--muted)]">
+              O total acima representa a capacidade total necessária no Celery.
+            </p>
           </div>
           <SummaryRow
             label={L.thread_limit_per_agent}

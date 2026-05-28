@@ -100,6 +100,7 @@ export type CalculatorResult = {
     provisioningThreads: number;
     sacThreads: number;
     apiThreads: number;
+    gponMinThreads: number;
     totalThreads: number;
     threadLimitPerAgent: number;
     agentsNeeded: number;
@@ -151,6 +152,7 @@ export function calculate(input: CalculatorInput): CalculatorResult {
     provisioningThreads +
     sacThreads +
     apiThreads;
+  const gponMinThreads = provisioningThreads + sacThreads + apiThreads;
 
   const threadLimitPerAgent = Math.max(1, scenario.limit_threads_per_agent);
   const agentsNeeded = Math.ceil(totalThreads / threadLimitPerAgent);
@@ -179,6 +181,7 @@ export function calculate(input: CalculatorInput): CalculatorResult {
       provisioningThreads,
       sacThreads,
       apiThreads,
+      gponMinThreads,
       totalThreads,
       threadLimitPerAgent,
       agentsNeeded,
