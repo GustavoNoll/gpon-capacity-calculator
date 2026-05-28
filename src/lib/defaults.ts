@@ -6,7 +6,7 @@ export const defaultCalculatorInput: CalculatorInput = {
     olts: 200,
     ponlinks_per_olt: 256,
     bulk_batch_size: 5,
-    bulk_minutes_per_call: 4.0,
+    bulk_seconds_per_call: 240.0,
   },
   massives: {
     per_day: 378.74,
@@ -16,14 +16,15 @@ export const defaultCalculatorInput: CalculatorInput = {
   sac: {
     active_users: 30,
     req_per_user_min: 3.0,
+    seconds_per_call: 40.0,
   },
-  sac_ponlink_status_seconds: 40.0,
   api_live: {
     req_per_min: 60.0,
     seconds_per_call: 11.59,
   },
   provisioning: {
     simultaneous_techs: 10,
+    seconds_per_call: 60.0,
   },
   routines: [
     { name: 'alarms', every_minutes: 5.0, p90_seconds: 10.87 },

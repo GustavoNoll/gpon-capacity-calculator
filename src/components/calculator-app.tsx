@@ -3,12 +3,14 @@
 import { useMemo, useState } from 'react';
 import { calculate, type CalculatorInput, type Routine } from '@/lib/calculator';
 import { defaultCalculatorInput } from '@/lib/defaults';
+import { labels } from '@/lib/labels';
+import { normalizeCalculatorInput } from '@/lib/normalize-input';
 import { NumberField } from './number-field';
 import { ResultsPanel } from './results-panel';
 import { SectionCard } from './section-card';
 
 function cloneDefaults(): CalculatorInput {
-  return JSON.parse(JSON.stringify(defaultCalculatorInput)) as CalculatorInput;
+  return structuredClone(defaultCalculatorInput);
 }
 
 export function CalculatorApp() {
@@ -111,11 +113,11 @@ export function CalculatorApp() {
 
   function importJson() {
     try {
-      const parsed = JSON.parse(jsonDraft) as CalculatorInput;
+      const parsed = JSON.parse(jsonDraft) as Record<string, unknown>;
       if (!parsed.scenario || !parsed.routines) {
-        throw new Error('JSON inválido: faltam scenario ou routines');
+        throw new Error('JSON inválido: faltam cenário ou rotinas');
       }
-      setInput(parsed);
+      setInput(normalizeCalculatorInput(parsed));
       setJsonError(null);
     } catch (e) {
       setJsonError(e instanceof Error ? e.message : 'JSON inválido');
@@ -126,7 +128,7 @@ export function CalculatorApp() {
     <div className="mx-auto max-w-7xl px-4 py-8">
       <header className="mb-8">
         <h1 className="text-2xl font-bold tracking-tight">
-          GPON Capacity Calculator
+          Calculadora de capacidade GPON
         </h1>
         <p className="mt-1 text-sm text-[var(--muted)]">
           OLTs:{' '}
@@ -134,8 +136,8 @@ export function CalculatorApp() {
             {input.scenario.olts}
           </span>
           {' · '}
-          Estimativa de threads para bulk, massives, rotinas, SAC, API e
-          provisioning (por OLT).
+          Estimativa de threads para bulk, massivas, rotinas, SAC, API e
+          provisionamento (por OLT).
         </p>
         <div className="mt-4 flex flex-wrap gap-2">
           <button
@@ -143,7 +145,7 @@ export function CalculatorApp() {
             onClick={resetDefaults}
             className="rounded-md border border-[var(--card-border)] bg-[var(--card)] px-3 py-1.5 text-xs font-medium hover:border-[var(--accent)]"
           >
-            Restaurar defaults
+            Restaurar padrões
           </button>
           <button
             type="button"
@@ -165,57 +167,57 @@ export function CalculatorApp() {
       <div className="grid gap-6 lg:grid-cols-2">
         <div className="space-y-4">
           <SectionCard
-            title="Cenário (scenario)"
+            title="Cenário"
             description="Parâmetros gerais da rede e bulk contínuo"
           >
             <NumberField
-              label="olts"
+              label={labels.scenario.olts}
               value={input.scenario.olts}
               onChange={(v) => updateScenario('olts', v)}
               min={1}
             />
             <NumberField
-              label="ponlinks_per_olt"
+              label={labels.scenario.ponlinks_per_olt}
               value={input.scenario.ponlinks_per_olt}
               onChange={(v) => updateScenario('ponlinks_per_olt', v)}
               min={1}
             />
             <NumberField
-              label="bulk_batch_size"
+              label={labels.scenario.bulk_batch_size}
               value={input.scenario.bulk_batch_size}
               onChange={(v) => updateScenario('bulk_batch_size', v)}
               min={1}
             />
             <NumberField
-              label="bulk_minutes_per_call"
-              value={input.scenario.bulk_minutes_per_call}
-              onChange={(v) => updateScenario('bulk_minutes_per_call', v)}
-              step={0.1}
+              label={labels.scenario.bulk_seconds_per_call}
+              value={input.scenario.bulk_seconds_per_call}
+              onChange={(v) => updateScenario('bulk_seconds_per_call', v)}
+              step={1}
               min={0}
-              hint="Duração de cada chamada bulk (minutos)"
+              hint="Duração média de cada chamada bulk"
             />
           </SectionCard>
 
           <SectionCard
-            title="Massives"
+            title="Massivas"
             description="Gatilhos de massivas e tempo por chamada"
           >
             <NumberField
-              label="per_day"
+              label={labels.massives.per_day}
               value={input.massives.per_day}
               onChange={(v) => updateMassives('per_day', v)}
               step={0.01}
               min={0}
             />
             <NumberField
-              label="calls_per_massive"
+              label={labels.massives.calls_per_massive}
               value={input.massives.calls_per_massive}
               onChange={(v) => updateMassives('calls_per_massive', v)}
               step={0.1}
               min={0}
             />
             <NumberField
-              label="seconds_per_call"
+              label={labels.massives.seconds_per_call}
               value={input.massives.seconds_per_call}
               onChange={(v) => updateMassives('seconds_per_call', v)}
               step={0.01}
@@ -225,30 +227,41 @@ export function CalculatorApp() {
 
           <SectionCard title="SAC" description="Tráfego ao vivo do SAC">
             <NumberField
-              label="active_users"
+              label={labels.sac.active_users}
               value={input.sac.active_users}
               onChange={(v) => updateSac('active_users', v)}
               min={0}
             />
             <NumberField
-              label="req_per_user_min"
+              label={labels.sac.req_per_user_min}
               value={input.sac.req_per_user_min}
               onChange={(v) => updateSac('req_per_user_min', v)}
               step={0.1}
               min={0}
             />
+            <NumberField
+              label={labels.sac.seconds_per_call}
+              value={input.sac.seconds_per_call}
+              onChange={(v) => updateSac('seconds_per_call', v)}
+              step={0.01}
+              min={0}
+              hint="Ex.: consulta de status do PON link"
+            />
           </SectionCard>
 
-          <SectionCard title="API ao vivo" description="Tráfego da API em tempo real">
+          <SectionCard
+            title="API ao vivo"
+            description="Tráfego da API em tempo real"
+          >
             <NumberField
-              label="req_per_min"
+              label={labels.api_live.req_per_min}
               value={input.api_live.req_per_min}
               onChange={(v) => updateApi('req_per_min', v)}
               step={0.1}
               min={0}
             />
             <NumberField
-              label="seconds_per_call"
+              label={labels.api_live.seconds_per_call}
               value={input.api_live.seconds_per_call}
               onChange={(v) => updateApi('seconds_per_call', v)}
               step={0.01}
@@ -257,45 +270,33 @@ export function CalculatorApp() {
           </SectionCard>
 
           <SectionCard
-            title="Provisioning"
-            description="Técnicos simultâneos em provisionamento"
+            title="Provisionamento"
+            description="Técnicos simultâneos; um técnico = um fluxo em voo"
           >
             <NumberField
-              label="simultaneous_techs"
+              label={labels.provisioning.simultaneous_techs}
               value={input.provisioning.simultaneous_techs}
               onChange={(v) => updateProvisioning('simultaneous_techs', v)}
               min={0}
+            />
+            <NumberField
+              label={labels.provisioning.seconds_per_call}
+              value={input.provisioning.seconds_per_call}
+              onChange={(v) => updateProvisioning('seconds_per_call', v)}
+              step={1}
+              min={0}
+              hint="Duração média de cada provisionamento (referência)"
             />
           </SectionCard>
 
           {showAdvanced ? (
             <div className="space-y-4">
-              <SectionCard
-                title="SAC — tempo operacional"
-                description="Avançado: duração da consulta ponlink status"
-              >
-                <NumberField
-                  label="sac_ponlink_status_seconds"
-                  value={input.sac_ponlink_status_seconds}
-                  onChange={(v) =>
-                    setInput((prev) => ({
-                      ...prev,
-                      sac_ponlink_status_seconds: v,
-                    }))
-                  }
-                  step={0.01}
-                  min={0}
-                />
-              </SectionCard>
-
               <section className="rounded-lg border border-[var(--card-border)] bg-[var(--card)] p-4">
                 <div className="mb-3 flex items-center justify-between">
                   <div>
-                    <h2 className="text-sm font-semibold">
-                      Rotinas OLT (routines)
-                    </h2>
+                    <h2 className="text-sm font-semibold">Rotinas OLT</h2>
                     <p className="text-xs text-[var(--muted)]">
-                      Intervalo e p90 de cada rotina por OLT
+                      Intervalo e P90 de cada rotina por OLT
                     </p>
                   </div>
                   <button
@@ -333,7 +334,7 @@ export function CalculatorApp() {
                       </div>
                       <div className="grid gap-2 sm:grid-cols-2">
                         <NumberField
-                          label="every_minutes"
+                          label={labels.routines.every_minutes}
                           value={r.every_minutes}
                           onChange={(v) =>
                             updateRoutine(i, 'every_minutes', v)
@@ -342,7 +343,7 @@ export function CalculatorApp() {
                           min={0.1}
                         />
                         <NumberField
-                          label="p90_seconds"
+                          label={labels.routines.p90_seconds}
                           value={r.p90_seconds}
                           onChange={(v) => updateRoutine(i, 'p90_seconds', v)}
                           step={0.01}
@@ -359,7 +360,7 @@ export function CalculatorApp() {
                   Importar / exportar cenário
                 </h2>
                 <p className="mb-2 text-xs text-[var(--muted)]">
-                  Cole ou edite o JSON completo (todos os dicts de uma vez).
+                  Cole ou edite o JSON completo (todos os parâmetros de uma vez).
                 </p>
                 <textarea
                   value={jsonDraft}
@@ -392,11 +393,10 @@ export function CalculatorApp() {
       </div>
 
       <footer className="mt-10 border-t border-[var(--card-border)] pt-4 text-center text-xs text-[var(--muted)]">
-        Portado de{' '}
+        Baseado em{' '}
         <code className="text-[var(--foreground)]">
           gpon_capacity_calculator.py
-        </code>{' '}
-        · Pronto para deploy na Vercel
+        </code>
       </footer>
     </div>
   );

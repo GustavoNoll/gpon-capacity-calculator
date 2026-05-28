@@ -1,0 +1,63 @@
+/** Rótulos em português para a interface (chaves internas permanecem em inglês). */
+
+export const labels = {
+  scenario: {
+    olts: 'OLTs',
+    ponlinks_per_olt: 'PON links por OLT',
+    bulk_batch_size: 'Tamanho do lote (bulk)',
+    bulk_seconds_per_call: 'Segundos por chamada',
+  },
+  massives: {
+    per_day: 'Massivas por dia',
+    calls_per_massive: 'Chamadas por massiva',
+    seconds_per_call: 'Segundos por chamada',
+  },
+  sac: {
+    active_users: 'Usuários ativos',
+    req_per_user_min: 'Requisições por usuário/min',
+    seconds_per_call: 'Segundos por chamada',
+  },
+  api_live: {
+    req_per_min: 'Requisições/min',
+    seconds_per_call: 'Segundos por chamada',
+  },
+  provisioning: {
+    simultaneous_techs: 'Técnicos simultâneos',
+    seconds_per_call: 'Segundos por chamada',
+  },
+  routines: {
+    every_minutes: 'Intervalo (min)',
+    p90_seconds: 'P90 (s)',
+  },
+  results: {
+    ponlinks_per_olt: 'PON links por OLT',
+    batch_size: 'Tamanho do lote',
+    calls_per_day: 'Chamadas/dia',
+    req_per_min: 'Req/min',
+    seconds_per_call: 'Segundos por chamada',
+    threads: 'Threads',
+    massives_per_day: 'Massivas/dia',
+    routine: 'Rotina',
+    interval_min: 'Intervalo (min)',
+    p90_s: 'P90 (s)',
+    routines_total: 'Total rotinas',
+    simultaneous_techs: 'Técnicos simultâneos',
+    active_users: 'Usuários ativos',
+    bulk_continuous: 'Bulk contínuo',
+    massives_trigger: 'Gatilho de massivas',
+    olt_routines: 'Rotinas OLT',
+    provisioning: 'Provisionamento',
+    sac: 'SAC',
+    live_api: 'API ao vivo',
+    summary: 'Resumo',
+    bulk_threads: 'Threads bulk contínuo',
+    massives_threads: 'Threads massivas',
+    routines_threads: 'Threads rotinas',
+    provisioning_threads: 'Threads provisionamento',
+    sac_threads: 'Threads SAC',
+    api_threads: 'Threads API',
+    total_threads: 'Total de threads',
+    sac_share: 'Participação SAC',
+    api_share: 'Participação API',
+  },
+} as const;

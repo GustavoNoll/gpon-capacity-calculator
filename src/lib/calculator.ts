@@ -4,7 +4,7 @@ export type Scenario = {
   olts: number;
   ponlinks_per_olt: number;
   bulk_batch_size: number;
-  bulk_minutes_per_call: number;
+  bulk_seconds_per_call: number;
 };
 
 export type Massives = {
@@ -16,6 +16,7 @@ export type Massives = {
 export type Sac = {
   active_users: number;
   req_per_user_min: number;
+  seconds_per_call: number;
 };
 
 export type ApiLive = {
@@ -25,6 +26,7 @@ export type ApiLive = {
 
 export type Provisioning = {
   simultaneous_techs: number;
+  seconds_per_call: number;
 };
 
 export type Routine = {
@@ -37,7 +39,6 @@ export type CalculatorInput = {
   scenario: Scenario;
   massives: Massives;
   sac: Sac;
-  sac_ponlink_status_seconds: number;
   api_live: ApiLive;
   provisioning: Provisioning;
   routines: Routine[];
@@ -113,7 +114,7 @@ export function calculate(input: CalculatorInput): CalculatorResult {
   const bulkReqMin = reqMinForCalls(bulkCallsDay);
   const bulkThreads = threadsFor(
     bulkReqMin,
-    scenario.bulk_minutes_per_call * 60.0,
+    scenario.bulk_seconds_per_call,
   );
 
   const massivesCallsDay = massives.per_day * massives.calls_per_massive;
@@ -138,7 +139,7 @@ export function calculate(input: CalculatorInput): CalculatorResult {
   const provisioningThreads = provisioning.simultaneous_techs;
 
   const sacReqMin = sac.active_users * sac.req_per_user_min;
-  const sacThreads = threadsFor(sacReqMin, input.sac_ponlink_status_seconds);
+  const sacThreads = threadsFor(sacReqMin, sac.seconds_per_call);
 
   const apiThreads = threadsFor(api_live.req_per_min, api_live.seconds_per_call);
 

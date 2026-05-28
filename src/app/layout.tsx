@@ -2,9 +2,9 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'GPON Capacity Calculator',
+  title: 'Calculadora de capacidade GPON',
   description:
-    'Estimate GPON thread capacity for bulk, massives, OLT routines, SAC, API and provisioning.',
+    'Estime a capacidade de threads GPON para bulk, massivas, rotinas OLT, SAC, API e provisionamento.',
 };
 
 export default function RootLayout({
